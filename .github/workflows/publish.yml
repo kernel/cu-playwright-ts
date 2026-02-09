@@ -9,15 +9,22 @@ jobs:
   version-bump:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate app token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.ADMIN_APP_ID }}
+          private-key: ${{ secrets.ADMIN_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Required for version bumping
-          ssh-key: ${{ secrets.DEPLOY_KEY }}  # Use deploy key to bypass branch protection
-      
+          token: ${{ steps.app-token.outputs.token }}  # Use app token to bypass branch protection
+
       - name: Setup Git
         run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'github-actions@github.com'
+          git config --global user.name 'kernel-internal[bot]'
+          git config --global user.email '260533166+kernel-internal[bot]@users.noreply.github.com'
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -41,8 +48,6 @@ jobs:
       
       - name: Bump version and push
         run: |
-          # Use SSH URL for the repository
-          git remote set-url origin git@github.com:${GITHUB_REPOSITORY}.git
           # Bump version
           npm version patch -m "chore: bump version to %s [skip ci]"
           # Push directly to main
