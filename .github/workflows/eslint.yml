@@ -12,10 +12,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.4.0
       
     - name: Setup Bun
-      uses: oven-sh/setup-bun@v1
+      uses: oven-sh/setup-bun@v1.2.2
       with:
         bun-version: latest
         
@@ -26,7 +26,7 @@ jobs:
       run: bun run lint
       
     - name: Annotate ESLint results
-      uses: ataylorme/eslint-annotate-action@v2
+      uses: ataylorme/eslint-annotate-action@2.2.0
       if: failure()
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
