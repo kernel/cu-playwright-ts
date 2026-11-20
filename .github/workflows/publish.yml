@@ -15,6 +15,7 @@ jobs:
         with:
           app-id: ${{ secrets.ADMIN_APP_ID }}
           private-key: ${{ secrets.ADMIN_APP_PRIVATE_KEY }}
+          permission-contents: write
 
       - uses: actions/checkout@v4.4.0
         with:
